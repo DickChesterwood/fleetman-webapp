@@ -10,7 +10,14 @@ public class Position {
 	private BigDecimal lat;
 	private BigDecimal longitude;
 	private Date timestamp;
+	private boolean upToDate;
 	
+	public boolean isUpToDate() {
+		return upToDate;
+	}
+	public void setUpToDate(boolean upToDate) {
+		this.upToDate = upToDate;
+	}
 	public BigDecimal getLat() {
 		return lat;
 	}

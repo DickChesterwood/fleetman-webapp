@@ -14,7 +14,7 @@
 	<p>The last report for this vehicle was at ${model.position.timestamp}</p>
 	
 	<p>It was at lat long ${model.position.lat}, ${model.position.longitude}</p>
-
+	
     <div id="map"></div>
     <script>
       function initMap() {
@@ -36,7 +36,7 @@
    
     </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=**removed - get your own google maps api key**&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDANCVU7UN9Y3C7l9_RVw-yFST6eKtP7v8&callback=initMap">
     </script>
   </body>
 </html>
