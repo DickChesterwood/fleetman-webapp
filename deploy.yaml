@@ -17,6 +17,7 @@
       
     - name: Setup security group
       ec2_group:
+        vpc_id: vpc-ec212388
         name: http-server
         description: Security rules for HTTP Server
         region: "{{ region }}"
@@ -38,6 +39,7 @@
 
     - name: Provision an instance
       ec2:
+        vpc_subnet_id: subnet-5c18572a
         key_name: "{{ keypair_name }}"
         group: http-server
         instance_type: "{{ instance_type }}"
@@ -136,7 +138,7 @@
        ip: "{{ live_ip_address }}"
        state: absent
        region: "{{ region }}"
-    when: old_green.instances[0].id is defined
+    when: old_green.instances|length > 0
 
   - name: Allocate the EIP to the new instance
     ec2_eip:

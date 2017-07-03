@@ -6,7 +6,7 @@
 	<groupId>com.virtualpairprogrammers</groupId>
 	<artifactId>fleetman</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>fleetman</name>
 	<description>VPP's Fleet Management Application</description>
@@ -109,6 +109,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration><executable>true</executable></configuration>
 			</plugin>
 		</plugins>
 		
