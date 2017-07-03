@@ -3,7 +3,7 @@ node {
       git 'https://github.com/RichardKnowles/fleetman-webapp'
    }
    stage('Build') {
-      sh "mvn clean package"
+      sh "mvn -skipTests clean package"
    }
    stage('Results') {
       archive 'target/*.war'
