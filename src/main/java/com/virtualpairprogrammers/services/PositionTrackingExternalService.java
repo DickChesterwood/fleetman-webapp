@@ -17,7 +17,7 @@ public class PositionTrackingExternalService
 	@Autowired 
 	private VehicleRepository repository;
 	
-	@HystrixCommand(fallbackMethod="handleExternalServiceDown")
+	// @HystrixCommand(fallbackMethod="handleExternalServiceDown")
 	public Position getLatestPositionForVehicleFromRemoteMicroservice(String name)
 	{
 		Position response = remoteService.getLatestPositionForVehicle(name);
