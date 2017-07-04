@@ -97,6 +97,12 @@
             dest: /etc/init.d/webapp
             state: link
     become: true
+    
+  - name: Send a config file to ensure the service starts up with production environment variable
+    copy:
+       content: JAVA_OPTS="-Dspring.profiles.active=production"
+       dest: /home/ec2-user/webapp/target/
+       mode: 0700
 
   - name: Install Config Server as a startup service
     service:

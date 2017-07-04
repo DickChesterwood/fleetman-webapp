@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 
 // Don't run Eureka etc in development
 @Configuration
-@Profile("!development")
+@Profile("production")
 @EnableCircuitBreaker
 @EnableDiscoveryClient
 @EnableFeignClients
