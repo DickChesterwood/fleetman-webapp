@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +21,14 @@ import com.virtualpairprogrammers.services.PositionTrackingExternalService;
 
 @Controller
 @Transactional
-@RequestMapping("/website/vehicles")
+@RequestMapping("/")
 public class VehicleController 
 {
 	@Autowired
 	private VehicleRepository data;
+	
+	@Autowired
+	private SimpMessageSendingOperations messagingTemplate;
 	
 	@Autowired
 	private PositionTrackingExternalService externalService;
@@ -49,11 +54,11 @@ public class VehicleController
 		return new ModelAndView("newVehicle","form",newVehicle);
 	} 
 	
-	@RequestMapping(value="/list.html", method=RequestMethod.GET)	
+	@RequestMapping(value="/", method=RequestMethod.GET)	
 	public ModelAndView vehicles()
 	{
 		List<Vehicle> allVehicles = data.findAll();
-		return new ModelAndView("allVehicles", "vehicles", allVehicles);
+		return new ModelAndView("liveTracking", "vehicles", allVehicles);
 	}
 	  
 	@RequestMapping(value="/vehicle/{name}")
@@ -78,4 +83,12 @@ public class VehicleController
 		return new ModelAndView("vehicleInfo", "model",model);
 	}
 	
+    @Scheduled(fixedRate=1000)
+    public void updatePositions()
+    {
+    	// get current position for city_truck
+    	Position latestPosition = externalService.getLatestPositionForVehicleFromRemoteMicroservice("city_truck");
+    	System.out.println("Sending " + latestPosition);
+    	this.messagingTemplate.convertAndSend("/vehiclepositions/messages", latestPosition);
+    }
 }

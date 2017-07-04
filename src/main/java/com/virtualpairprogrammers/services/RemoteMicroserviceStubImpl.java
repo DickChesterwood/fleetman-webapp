@@ -15,9 +15,9 @@ public class RemoteMicroserviceStubImpl implements RemotePositionMicroserviceCal
 	
 	private Position[] positions = { 
 			new Position(new BigDecimal("53.3519601635634899139404296875"),
-					     new BigDecimal("-1.54410858638584613800048828125"), new java.util.Date(),true),
+					     new BigDecimal("-1.54410858638584613800048828125"), new java.util.Date(),true, "city_truck"),
 			new Position(new BigDecimal("53.35"),
-				         new BigDecimal("-1.54"), new java.util.Date(),true)
+				         new BigDecimal("-1.54"), new java.util.Date(),true, "city_truck")
 	}; 
 	
 	@Override

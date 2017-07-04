@@ -11,16 +11,26 @@ public class Position {
 	private BigDecimal longitude;
 	private Date timestamp;
 	private boolean upToDate;
+	private String vehicleName;
 	
 	public Position() {}
 	
-	public Position(BigDecimal lat, BigDecimal longitude, Date timestamp, boolean upToDate) {
+	public Position(BigDecimal lat, BigDecimal longitude, Date timestamp, boolean upToDate, String vehicleName) {
 		super();
 		this.lat = lat;
 		this.longitude = longitude;
 		this.timestamp = timestamp;
 		this.upToDate = upToDate;
+		this.vehicleName = vehicleName;
 	}
+	public String getVehicleName() {
+		return vehicleName;
+	}
+
+	public void setVehicleName(String vehicleName) {
+		this.vehicleName = vehicleName;
+	}
+
 	public boolean isUpToDate() {
 		return upToDate;
 	}

@@ -45,6 +45,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-websocket</artifactId>
+	    </dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>		
 		
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -103,12 +113,37 @@
     		<artifactId>spring-cloud-starter-config</artifactId>
     	</dependency> 
 		
-	<dependency>
-		<groupId>mysql</groupId>
-		<artifactId>mysql-connector-java</artifactId>
-		<version>5.1.6</version>
-	</dependency>
-		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+	
+		<!-- Webjars brings in resources such as stylessheets and libraries like Jquery in as jars -->
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>webjars-locator</artifactId>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>sockjs-client</artifactId>
+	      <version>1.0.2</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>stomp-websocket</artifactId>
+	      <version>2.3.3</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>bootstrap</artifactId>
+	      <version>3.3.7</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>jquery</artifactId>
+	      <version>3.1.0</version>
+	    </dependency>		
 	</dependencies>
 	
 	<build>
@@ -122,11 +157,8 @@
 		
 		<resources>
 			<resource>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
-				<includes>
-					<include>*.properties</include>
-				</includes>
 			</resource>		
 		</resources>
 		
