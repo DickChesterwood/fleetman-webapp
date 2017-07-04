@@ -102,7 +102,7 @@
     copy:
        content: JAVA_OPTS="-Dspring.profiles.active=production"
        dest: /home/ec2-user/webapp/target/fleetman-0.0.1-SNAPSHOT.conf
-       mode: 0700
+       mode: 0600
 
   - name: Install Config Server as a startup service
     service:
