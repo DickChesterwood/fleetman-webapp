@@ -19,12 +19,14 @@
         
     <script src="/webjars/jquery/jquery.min.js"></script>    
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="movingMarker.js"></script>
   
             
             <!--  TODO possibly move these to the bottom -->
    		<script>
    		var mymap;
    		var marker;
+   		var lastMessage;
    		
  			$(document).ready(function(){ 
 				mymap = L.map('mapid').setView([0,0], 17);
@@ -36,11 +38,13 @@
     				accessToken: 'your.mapbox.access.token'
 				}).addTo(mymap);
 
-				marker = L.marker([0, 0]).addTo(mymap);			
-
+				mymarker = L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);
  			});
    		
-   	$(document).ready(function(){ 	   
+   		
+   	$(document).ready(function(){ 
+  		mymap.setView([53.35,-1.54]);		
+     		   
 	   var client = Stomp.over(new SockJS('/updates'));
 	
 	   client.connect({}, function (frame) {
@@ -52,9 +56,9 @@
 
     function updateReports(mesg)
     {
-		$('#reports').append('<li>' + mesg.vehicleName + ' reported ('  + mesg.lat + ',' + mesg.longitude + ') at ' + mesg.timestamp + '</li>');
+//		$('#reports').append('<li>' + mesg.vehicleName + ' reported ('  + mesg.lat + ',' + mesg.longitude + ') at ' + mesg.timestamp + '</li>');
 		mymap.setView([mesg.lat,mesg.longitude]);		
-		marker.setLatLng([mesg.lat, mesg.longitude]);			
+		mymarker.moveTo([mesg.lat, mesg.longitude],5000);			
     }    
   </script>    
   
