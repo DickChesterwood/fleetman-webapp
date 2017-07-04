@@ -12,6 +12,15 @@ public class Position {
 	private Date timestamp;
 	private boolean upToDate;
 	
+	public Position() {}
+	
+	public Position(BigDecimal lat, BigDecimal longitude, Date timestamp, boolean upToDate) {
+		super();
+		this.lat = lat;
+		this.longitude = longitude;
+		this.timestamp = timestamp;
+		this.upToDate = upToDate;
+	}
 	public boolean isUpToDate() {
 		return upToDate;
 	}
