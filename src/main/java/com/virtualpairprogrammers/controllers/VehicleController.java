@@ -83,7 +83,7 @@ public class VehicleController
 		return new ModelAndView("vehicleInfo", "model",model);
 	}
 	
-    @Scheduled(fixedRate=100)
+    @Scheduled(fixedRate=5000)
     public void updatePositions()
     {
     	// get current position for city_truck
