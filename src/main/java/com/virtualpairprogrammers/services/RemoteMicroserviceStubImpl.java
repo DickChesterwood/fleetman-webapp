@@ -10,20 +10,21 @@ import com.virtualpairprogrammers.controllers.Position;
 @Profile("development")
 @Service
 public class RemoteMicroserviceStubImpl implements RemotePositionMicroserviceCalls 
-{
-	private int counter = 0;
-	
-	private Position[] positions = { 
-			new Position(new BigDecimal("53.3519601635634899139404296875"),
-					     new BigDecimal("-1.54410858638584613800048828125"), new java.util.Date(),true, "city_truck"),
-			new Position(new BigDecimal("53.35"),
-				         new BigDecimal("-1.54"), new java.util.Date(),true, "city_truck")
-	}; 
-	
-	@Override
+{	
+	// This stub implementation simply returns a random position in a small area.
+	// Something in the area of 53.3xxxx and -1.6xxxxxx
 	public Position getLatestPositionForVehicle(String name) 
 	{
-		return positions[counter++ % positions.length];
+		String randomFraction = "" + Math.random();
+		randomFraction = randomFraction.substring(2, randomFraction.length());
+				
+        BigDecimal lat = new BigDecimal("53.35" + randomFraction);
+
+		randomFraction = "" + Math.random();
+		randomFraction = randomFraction.substring(2, randomFraction.length());
+		
+		BigDecimal longitude = new BigDecimal("-1.54" + randomFraction);
+		return new Position(lat, longitude,new java.util.Date(), true, name);
 	}
 
 }

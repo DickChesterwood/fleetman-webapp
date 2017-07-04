@@ -86,9 +86,12 @@ public class VehicleController
     @Scheduled(fixedRate=5000)
     public void updatePositions()
     {
-    	// get current position for city_truck
-    	Position latestPosition = externalService.getLatestPositionForVehicleFromRemoteMicroservice("city_truck");
-    	System.out.println("Sending " + latestPosition);
-    	this.messagingTemplate.convertAndSend("/vehiclepositions/messages", latestPosition);
+    	// get current position for all vehicles
+    	List<Vehicle> allVehicles = data.findAll();
+    	for (Vehicle next: allVehicles)
+    	{
+	    	Position latestPosition = externalService.getLatestPositionForVehicleFromRemoteMicroservice(next.getName());
+	    	this.messagingTemplate.convertAndSend("/vehiclepositions/messages", latestPosition);
+    	}
     }
 }

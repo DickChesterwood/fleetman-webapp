@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -25,7 +25,7 @@
             <!--  TODO possibly move these to the bottom -->
    		<script>
    		var mymap;
-   		var marker;
+   		var markerDictionary = {};
    		var lastMessage;
    		
  			$(document).ready(function(){ 
@@ -38,7 +38,11 @@
     				accessToken: 'your.mapbox.access.token'
 				}).addTo(mymap);
 
-				mymarker = L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);
+				// TODO get rid of hardcode
+				markerDictionary.city_truck =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap); 
+				markerDictionary.village_truck =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);
+				markerDictionary.small_parcel_service1 =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);
+				markerDictionary.express_delivery1 =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);								 
  			});
    		
    		
@@ -56,8 +60,10 @@
 
     function updateReports(mesg)
     {
-//		$('#reports').append('<li>' + mesg.vehicleName + ' reported ('  + mesg.lat + ',' + mesg.longitude + ') at ' + mesg.timestamp + '</li>');
-		mymap.setView([mesg.lat,mesg.longitude]);		
+        var targetId = '#' + mesg.vehicleName;
+		$(targetId).replaceWith('<li id="' + mesg.vehicleName + '"><p>' + mesg.vehicleName + ' last report ' + mesg.prettyTime + '</p>' + '<p>Current speed: ' + mesg.speed + '</p></li>');
+		//mymap.setView([mesg.lat,mesg.longitude]);		
+		var mymarker = markerDictionary[mesg.vehicleName]
 		mymarker.moveTo([mesg.lat, mesg.longitude],5000);			
     }    
   </script>    
@@ -75,16 +81,14 @@
 			<div id="positionData">
 				<h3>Latest updates</h3>
 				<ul id="reports">
-					<li>To appear here....</li>
+					<li th:each="vehicle : ${vehicles}" th:id="${vehicle.name}"><p><span th:text="${vehicle.name}"/> has no updates yet.</p>
+					    <p>Current speed: unknown</p>					    
+				    </li>
 				</ul>				
 			</div>
 		</div>
     </div>
 
-	<div class="row">
-  		<div class="col-md-12">Footer can appear here</div>
-	</div>
-    
 
   </body>
 </html>

@@ -21,6 +21,7 @@ public class PositionTrackingExternalService
 	public Position getLatestPositionForVehicleFromRemoteMicroservice(String name)
 	{
 		Position response = remoteService.getLatestPositionForVehicle(name);
+		response.setVehicleName(name);
 		response.setUpToDate(true);
 		return response;
 	}

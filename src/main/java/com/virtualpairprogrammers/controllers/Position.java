@@ -1,6 +1,7 @@
 package com.virtualpairprogrammers.controllers;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -54,6 +55,12 @@ public class Position {
 	}
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public String getPrettyTime()
+	{
+		SimpleDateFormat fmt = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+		return fmt.format(this.timestamp);
 	}
 
 	
