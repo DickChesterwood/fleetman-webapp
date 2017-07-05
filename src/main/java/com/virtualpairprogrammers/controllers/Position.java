@@ -13,7 +13,9 @@ public class Position {
 	private Date timestamp;
 	private boolean upToDate;
 	private String vehicleName;
+	private String speed;
 	
+
 	public Position() {}
 	
 	public Position(BigDecimal lat, BigDecimal longitude, Date timestamp, boolean upToDate, String vehicleName) {
@@ -62,6 +64,12 @@ public class Position {
 		SimpleDateFormat fmt = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 		return fmt.format(this.timestamp);
 	}
-
 	
+	public String getSpeed() {
+		return speed;
+	}
+	
+	public void setSpeed(String speed) {
+		this.speed = speed;
+	}
 }
