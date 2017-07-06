@@ -91,7 +91,6 @@ public class VehicleController
     	for (Vehicle next: allVehicles)
     	{
 	    	Position latestPosition = externalService.getLatestPositionForVehicleFromRemoteMicroservice(next.getName());
-	    	System.out.println("Getting latest position for " + next.getName() + " which was " + latestPosition);
 	    	this.messagingTemplate.convertAndSend("/vehiclepositions/messages", latestPosition);
     	}
     }

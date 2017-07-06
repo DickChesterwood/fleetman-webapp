@@ -23,7 +23,7 @@
   
             
             <!--  TODO possibly move these to the bottom -->
-   		<script>
+    <script th:inline="javascript">
    		var mymap;
    		var markerDictionary = {};
    		var lastMessage;
@@ -38,11 +38,11 @@
     				accessToken: 'your.mapbox.access.token'
 				}).addTo(mymap);
 
-				// TODO get rid of hardcode
-				markerDictionary.city_truck =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap); 
-				markerDictionary.village_truck =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);
-				markerDictionary.small_parcel_service1 =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);
-				markerDictionary.express_delivery1 =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap);								 
+				/*[# th:each="vehicle : ${vehicles}"]*/				
+				// TODO see case re initial position data
+				markerDictionary./*[[${vehicle.name}]]*/ =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap); 
+				/*[/]*/
+											 
  			});
    		
    		
