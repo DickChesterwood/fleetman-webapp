@@ -58,6 +58,13 @@ public class VehicleController
 	public ModelAndView vehicles()
 	{
 		List<Vehicle> allVehicles = data.findAll();
+		for (Vehicle next: allVehicles)
+		{
+			Position latest = externalService.getLatestPositionForVehicleFromRemoteMicroservice(next.getName());
+			next.setLat(latest.getLat());
+			next.setLongitude(latest.getLongitude());
+			next.setLastRecordedPosition(latest.getTimestamp());
+		}
 		return new ModelAndView("liveTracking", "vehicles", allVehicles);
 	}
 	  

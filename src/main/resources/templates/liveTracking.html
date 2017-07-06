@@ -37,12 +37,16 @@
 				    id: 'mapbox.streets',
     				accessToken: 'your.mapbox.access.token'
 				}).addTo(mymap);
-
-				/*[# th:each="vehicle : ${vehicles}"]*/				
-				// TODO see case re initial position data
-				markerDictionary./*[[${vehicle.name}]]*/ =L.Marker.movingMarker([[53.35, -1.54]]).addTo(mymap); 
-				/*[/]*/
-											 
+							
+			    /*<![CDATA[*/		
+			    var vehicles = [[${vehicles}]]
+			    for (i = 0; i < vehicles.length; i++) {
+			        var vehicleName = vehicles[i].name;
+			        var lat = vehicles[i].lat;
+			        var longitude = vehicles[i].longitude;
+					markerDictionary[vehicleName]=L.Marker.movingMarker([[lat, longitude]]).addTo(mymap);  
+			    }			
+			    /*]]>*/
  			});
    		
    		
