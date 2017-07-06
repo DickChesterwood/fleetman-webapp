@@ -12,6 +12,9 @@ import com.virtualpairprogrammers.domain.Vehicle;
 
 /**
  * Used to ensure that the necessary data is pre-populated.
+ * 
+ * Of course "in real life" (I'm sick of writing that - do I live in a fake parallel universe?) this
+ * data would come from the user/administrator/planner/whatever.
  */
 @Service
 @Transactional
@@ -21,7 +24,14 @@ public class Startup {
 	@Autowired
 	private VehicleRepository data;
 	
-	private String[] requiredVehicles = {"city_truck", "village_truck", "small_parcel_service1", "express_delivery1"};
+	private String[] requiredVehicles = {"city_truck", "village_truck", "small_parcel_service1", "express_delivery1", "dronfield_round",
+										 "dronfield_round_b","electronics_pcb_rush", "factory_run_a","factory_run_b",
+										 "factory_run_c","factory_run_d","factory_run_e","factory_run_f","factory_run_g","factory_run_h",
+										 "huddersfield_truck_a","huddersfield_truck_b","local_deliveries_a","local_deliveries_b","london_riverside",
+										 "secret_service_a","secret_service_b","secret_service_c","secret_service_d","secret_service_e","secret_service_f",
+										 "sheffield_truck_a","sheffield_truck_b","sheffield_truck_c","sheffield_truck_d","top_secret","university_internal_mail_a",
+										 "university_internal_mail_b","university_internal_mail_c","university_internal_mail_d","university_internal_mail_e",
+										 "university_internal_mail_f","university_internal_mail_g"};
 	
 	public void populateData()
 	{
