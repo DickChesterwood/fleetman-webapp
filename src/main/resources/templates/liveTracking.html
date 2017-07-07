@@ -41,6 +41,7 @@
 			    /*<![CDATA[*/		
 			    var vehicles = [[${vehicles}]]
 			    for (i = 0; i < vehicles.length; i++) {
+			    	if (vehicles[i] == null) alert("Null found at pos " + i);
 			        var vehicleName = vehicles[i].name;
 			        var lat = vehicles[i].lat;
 			        var longitude = vehicles[i].longitude;
