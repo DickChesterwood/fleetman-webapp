@@ -36,6 +36,8 @@ public class Startup {
 	public void populateData()
 	{
 		Arrays.stream(requiredVehicles).forEach(it -> createVehicleIfDoesntExist(it));
+		Vehicle poison = data.findByName("electronics_pcb_rush");
+		if (poison != null) data.delete(poison);
 	}
 
 	private void createVehicleIfDoesntExist(String name) {
