@@ -25,7 +25,7 @@ public class Startup {
 	private VehicleRepository data;
 	
 	private String[] requiredVehicles = {"city_truck", "village_truck", "small_parcel_service1", "express_delivery1", "dronfield_round",
-										 "dronfield_round_b","electronics_pcb_rush", "factory_run_a","factory_run_b",
+										 "dronfield_round_b","electronics_pcb_rush_deliveries", "factory_run_a","factory_run_b",
 										 "factory_run_c","factory_run_d","factory_run_e","factory_run_f","factory_run_g","factory_run_h",
 										 "huddersfield_truck_a","huddersfield_truck_b","local_deliveries_a","local_deliveries_b","london_riverside",
 										 "secret_service_a","secret_service_b","secret_service_c","secret_service_d","secret_service_e","secret_service_f",
