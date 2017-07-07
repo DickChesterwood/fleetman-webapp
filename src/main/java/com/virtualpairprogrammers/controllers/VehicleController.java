@@ -90,13 +90,15 @@ public class VehicleController
 		return new ModelAndView("vehicleInfo", "model",model);
 	}
 	
-    @Scheduled(fixedRate=5000)
+    @Scheduled(fixedRate=100)
     public void updatePositions()
     {
     	// get current position for all vehicles
     	List<Vehicle> allVehicles = data.findAll();
     	for (Vehicle next: allVehicles)
     	{
+    		// Only publish 1 in 10 reports - this makes for random updates, each one approx a second apart
+    		if (Math.random() < 0.9) continue;
 	    	Position latestPosition = externalService.getLatestPositionForVehicleFromRemoteMicroservice(next.getName());
 	    	this.messagingTemplate.convertAndSend("/vehiclepositions/messages", latestPosition);
     	}
