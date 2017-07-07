@@ -41,10 +41,14 @@
 			    /*<![CDATA[*/		
 			    var vehicles = [[${vehicles}]]
 			    for (i = 0; i < vehicles.length; i++) {
-			    	if (vehicles[i] == null) alert("Null found at pos " + i);
 			        var vehicleName = vehicles[i].name;
 			        var lat = vehicles[i].lat;
 			        var longitude = vehicles[i].longitude;
+			        if (lat == null || longitude == null) 
+			        {
+			           lat= 53.35;
+			           longitude = -1.54;
+			        }
 					markerDictionary[vehicleName]=L.Marker.movingMarker([[lat, longitude]]).addTo(mymap);  
 			    }			
 			    /*]]>*/
