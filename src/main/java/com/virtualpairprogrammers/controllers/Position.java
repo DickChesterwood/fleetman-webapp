@@ -61,6 +61,7 @@ public class Position {
 	
 	public String getPrettyTime()
 	{
+		if (this.timestamp == null) return "No time given";		
 		SimpleDateFormat fmt = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 		return fmt.format(this.timestamp);
 	}
