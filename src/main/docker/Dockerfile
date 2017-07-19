@@ -2,7 +2,7 @@ FROM openjdk:8u131-jre
 
 MAINTAINER Richard Knowles "richard@inceptiontraining.co.uk"
 
-ADD /target/fleetman-0.0.1-SNAPSHOT.war webapp.war
+ADD maven/fleetman-0.0.1-SNAPSHOT.war webapp.war
 
 EXPOSE 8080
 
