@@ -21,15 +21,13 @@
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="movingMarker.js"></script>
   
-            
-            <!--  TODO possibly move these to the bottom -->
     <script th:inline="javascript">
    		var mymap;
    		var markerDictionary = {};
    		var lastMessage;
    		
  			$(document).ready(function(){ 
-				mymap = L.map('mapid').setView([0,0], 17);
+				mymap = L.map('mapid').setView([53.38207,-1.48423], 14);
 
 				L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZGlja2NoZXN0ZXJ3b29kIiwiYSI6ImNqNG9kcHI2aDJtN2wzMnBndmU3bWkzdmgifQ.rdSmry2jgNl4jmydiypisQ', {
     				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -44,54 +42,51 @@
 			        var vehicleName = vehicles[i].name;
 			        var lat = vehicles[i].lat;
 			        var longitude = vehicles[i].longitude;
-			        if (lat == null || longitude == null) 
+			        
+			        if (lat != null && longitude != null) 
 			        {
-			           lat= 53.35;
-			           longitude = -1.54;
+						markerDictionary[vehicleName]=L.Marker.movingMarker([[lat, longitude]]).addTo(mymap);  
 			        }
-					markerDictionary[vehicleName]=L.Marker.movingMarker([[lat, longitude]]).addTo(mymap);  
 			    }			
 			    /*]]>*/
- 			});
-   		
-   		
-   	$(document).ready(function(){ 
-  		mymap.setView([53.35,-1.54]);		
-     		   
-	   var client = Stomp.over(new SockJS('/updates'));
+		  	    
+		  	    var client = Stomp.over(new SockJS('/updates'));
 	
-	   client.connect({}, function (frame) {
-	       client.subscribe('/vehiclepositions/messages', function (message) {
-		      updateReports(JSON.parse(message.body));
-	       });
-	   });	   	   
-	});
-
-    function updateReports(mesg)
-    {
-        var targetId = '#' + mesg.vehicleName;
-		$(targetId).replaceWith('<li id="' + mesg.vehicleName + '"><p>' + mesg.vehicleName + ' last report ' + mesg.prettyTime + '</p>' + '<p>Current speed: ' + mesg.speed + '</p></li>');
-		//mymap.setView([mesg.lat,mesg.longitude]);		
-		var mymarker = markerDictionary[mesg.vehicleName]
-		mymarker.moveTo([mesg.lat, mesg.longitude],5000);			
-    }    
-  </script>    
+	            client.connect({}, function (frame) {
+	               client.subscribe('/vehiclepositions/messages', function (message) {
+		              updateReports(JSON.parse(message.body));
+	               });
+	            });	   	   
+ 			});
+   		   		
+		    function updateReports(mesg)
+		    {
+		        var targetId = '#' + mesg.vehicleName;
+				$(targetId).replaceWith('<li class="vehicleInfo" id="' + mesg.vehicleName + '"><p><strong>' + mesg.vehicleName + '</strong></p><p>' + mesg.prettyTime + '</p>' + '<p>Speed: ' + mesg.speed + '</p></li>');
+				//mymap.setView([mesg.lat,mesg.longitude]);		
+				var mymarker = markerDictionary[mesg.vehicleName]
+				mymarker.moveTo([mesg.lat, mesg.longitude],5000);			
+		    }    
+     </script>    
   
-      <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>  
+     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+     <script src="/webjars/stomp-websocket/stomp.min.js"></script>  
         
   </head>
   <body>
     <h1>Fleetman Live Tracking</h1>
     
     <div class="row">
-  		<div class="col-md-9"><div id="mapid"></div></div>
+  		<div class="col-md-7"><div id="mapid"></div></div>
         <div class="col-md-3">
 			<div id="positionData">
 				<h3>Latest updates</h3>
 				<ul id="reports">
-					<li th:each="vehicle : ${vehicles}" th:id="${vehicle.name}"><p><span th:text="${vehicle.name}"/> has no updates yet.</p>
-					    <p>Current speed: unknown</p>					    
+					<li class="vehicleInfo" th:each="vehicle : ${vehicles}" th:id="${vehicle.name}">
+					   <input type='radio' name='test' value='1' checked="true"/>					
+					   <p><strong><span th:text="${vehicle.name}"/></strong></p>
+					   <p>No updates</p>
+					   <p>Speed: unreported</p>
 				    </li>
 				</ul>				
 			</div>

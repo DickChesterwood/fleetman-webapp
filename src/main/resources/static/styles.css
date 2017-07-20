@@ -1,7 +1,31 @@
 #mapid { 
-	height: 1000px; 
-	width: 1000px;
+	height: 600px; 
+	width: 900px;
 }
 
 #vehicleList {
+}
+
+#positionData {
+    background-color: #eee;
+	overflow:auto; 
+	height:600px;
+	padding: 15px;
+}
+
+.vehicleInfo {
+	font-size: 0.9em;
+}
+
+.vehicleInfo p {
+	line-height: 90%;
+}
+
+#reports {
+	list-style: none;	
+}
+
+#reports li {
+	list-style: none;	
+	margin-bottom: 25px;
 }
