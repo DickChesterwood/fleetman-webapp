@@ -3,8 +3,10 @@ package com.virtualpairprogrammers;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+@Profile("!docker-demo")
 @SpringBootApplication
 @EnableScheduling
 public class FleetmanApplication {
