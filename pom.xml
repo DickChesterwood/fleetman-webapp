@@ -83,6 +83,12 @@
         	<optional>true</optional>
     	</dependency>
     	
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-tomcat</artifactId>
+	        <scope>provided</scope>
+	    </dependency>    	
+    	
     	<dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-security</artifactId>
@@ -166,7 +172,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration><executable>true</executable></configuration>
+				<!--  For standalone JAR file <configuration><executable>false</executable></configuration> -->
+				<configuration>
+                	<mainClass>com.virtualpairprogrammers.TomcatWARApplication</mainClass>
+            	</configuration>
 			</plugin>
 			
 			<plugin>

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.virtualpairprogrammers.controllers.Position;
 
-@Profile("development")
+@Profile({"development","docker-demo"})
 @Service
 public class RemoteMicroserviceStubImpl implements RemotePositionMicroserviceCalls 
 {	

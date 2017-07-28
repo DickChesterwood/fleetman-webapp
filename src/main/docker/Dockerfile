@@ -1,6 +1,6 @@
 FROM openjdk:8u131-jre
 
-MAINTAINER Richard Knowles "richard@inceptiontraining.co.uk"
+MAINTAINER Richard Chesterwood "contact@virtualpairprogrammers.com"
 
 ADD maven/fleetman-0.0.1-SNAPSHOT.war webapp.war
 
