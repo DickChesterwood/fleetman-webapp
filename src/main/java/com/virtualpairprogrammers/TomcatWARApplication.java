@@ -1,5 +1,6 @@
 package com.virtualpairprogrammers;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
@@ -17,5 +18,9 @@ public class TomcatWARApplication extends SpringBootServletInitializer
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(TomcatWARApplication.class);
     }
+    
+	public static void main(String[] args) {
+		SpringApplication.run(FleetmanApplication.class, args);		
+	}    
 
 }
