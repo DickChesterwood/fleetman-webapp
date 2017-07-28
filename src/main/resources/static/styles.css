@@ -10,15 +10,11 @@
     background-color: #eee;
 	overflow:auto; 
 	height:600px;
-	padding: 15px;
+	padding-left: 3px;
 }
 
 .vehicleInfo {
-	font-size: 0.9em;
-}
-
-.vehicleInfo p {
-	line-height: 90%;
+	margin-left: 20px;
 }
 
 #reports {
@@ -28,4 +24,14 @@
 #reports li {
 	list-style: none;	
 	margin-bottom: 25px;
+}
+
+.checkboxDiv {
+	float: left;
+	font-size: 2.0em;
+	margin-top: -12px;
+}
+
+input[type='radio'] { 
+	transform: scale(1.5); 
 }

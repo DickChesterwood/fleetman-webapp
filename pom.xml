@@ -175,8 +175,8 @@
 				<version>0.21.0</version>
 
 				<configuration>
-					<!--  windows?-->
-                    <!-- <dockerHost>http://127.0.0.1:2375</dockerHost> -->
+					<!--  If using Docker Toolbox (Windows), you must find the IP of your VM. docker-machine ip -->
+                    <dockerHost>http://192.168.99.100:2375</dockerHost> 
 
 					<!--  linux -->
                     <!--<dockerHost>http://127.0.0.1:2375</dockerHost>-->

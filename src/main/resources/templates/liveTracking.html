@@ -19,6 +19,7 @@
         
     <script src="/webjars/jquery/jquery.min.js"></script>    
     <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    
     <script type="text/javascript" src="movingMarker.js"></script>
   
     <script th:inline="javascript">
@@ -45,7 +46,7 @@
 			        
 			        if (lat != null && longitude != null) 
 			        {
-						markerDictionary[vehicleName]=L.Marker.movingMarker([[lat, longitude]]).addTo(mymap);  
+						markerDictionary[vehicleName]=L.Marker.movingMarker([[lat, longitude]]).bindTooltip(vehicleName).addTo(mymap);  
 			        }
 			    }			
 			    /*]]>*/
@@ -62,10 +63,22 @@
 		    function updateReports(mesg)
 		    {
 		        var targetId = '#' + mesg.vehicleName;
-				$(targetId).replaceWith('<li class="vehicleInfo" id="' + mesg.vehicleName + '"><p><strong>' + mesg.vehicleName + '</strong></p><p>' + mesg.prettyTime + '</p>' + '<p>Speed: ' + mesg.speed + '</p></li>');
-				//mymap.setView([mesg.lat,mesg.longitude]);		
+				$(targetId + " .vehicleInfo").replaceWith('<div class="vehicleInfo" id="' + mesg.vehicleName + '"><p><strong>' + mesg.vehicleName + '</strong></p><p>' + mesg.prettyTime + '</p>' + '<p>Speed: ' + mesg.speed + '</p></div>');
+
 				var mymarker = markerDictionary[mesg.vehicleName]
 				mymarker.moveTo([mesg.lat, mesg.longitude],5000);			
+				
+				// If this radio button is checked, center the map on this vehicle
+
+				if($(targetId + "-radio").is(':checked'))
+				{
+				  mymap.setView([mesg.lat,mesg.longitude], mymap.getZoom(), {
+				   	  "animate": true,
+  "pan": {
+    "duration": 5
+  }
+				  }); 
+				}
 		    }    
      </script>    
   
@@ -81,14 +94,18 @@
         <div class="col-md-3">
 			<div id="positionData">
 				<h3>Latest updates</h3>
-				<ul id="reports">
-					<li class="vehicleInfo" th:each="vehicle : ${vehicles}" th:id="${vehicle.name}">
-					   <input type='radio' name='test' value='1' checked="true"/>					
+				<div class="outerBox" th:each="vehicle,iter : ${vehicles}" th:id="${vehicle.name}">
+				   <div class="checkboxDiv">
+				   		<input type='radio' name='vehicle' th:id="${vehicle.name} + '-radio'" checked="checked" th:if="${iter.index eq 0}"/>
+				   		<input type='radio' name='vehicle' th:id="${vehicle.name} + '-radio'" th:if="${iter.index gt 0}"/>				   		
+				   </div>
+				   		
+				   <div class="vehicleInfo">			
 					   <p><strong><span th:text="${vehicle.name}"/></strong></p>
 					   <p>No updates</p>
 					   <p>Speed: unreported</p>
-				    </li>
-				</ul>				
+				   </div>
+			    </div>
 			</div>
 		</div>
     </div>
