@@ -6,6 +6,8 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +37,29 @@ public class Startup {
 										 "university_internal_mail_b","university_internal_mail_c","university_internal_mail_d","university_internal_mail_e",
 										 "university_internal_mail_f","university_internal_mail_g"};
 	
-	@PostConstruct
-	public void populateData()
-	{
-		Arrays.stream(requiredVehicles).forEach(it -> createVehicleIfDoesntExist(it));
-		Vehicle poison = data.findByName("electronics_pcb_rush");
-		if (poison != null) data.delete(poison);
+	@Configuration
+	@Profile("production")
+	class ProductionVersion {
+		@PostConstruct
+		public void populateData()
+		{
+			Arrays.stream(requiredVehicles).forEach(it -> createVehicleIfDoesntExist(it));
+		}		
 	}
-
+	@Configuration
+	@Profile({"development","docker-demo"})
+	class LocalDevelopmentVersion {
+		@PostConstruct
+		public void populateData()
+		{
+			createVehicleIfDoesntExist(requiredVehicles[0]);
+			createVehicleIfDoesntExist(requiredVehicles[1]);
+		}		
+	}
+	
 	private void createVehicleIfDoesntExist(String name) {
 		Vehicle exisiting = data.findByName(name);
-		if (exisiting == null)
+		if (exisiting == null)	
 		{
 			log.info("Creating record for " + name);
 			this.data.save(new Vehicle(name));
