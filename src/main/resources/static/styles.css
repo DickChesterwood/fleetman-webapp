@@ -1,16 +1,28 @@
+body {
+	font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 16.4px;	
+}
+
 #mapid { 
 	height: 600px; 
 	width: 600px;
+	float: left;
 }
 
 #vehicleList {
 }
 
 #positionData {
-    background-color: #eee;
+    background-color: #ddd;
 	overflow:auto; 
 	height:600px;
+	margin-left: 650px;
 	padding-left: 3px;
+	width: 300px;
 }
 
 .vehicleInfo {
@@ -28,10 +40,14 @@
 
 .checkboxDiv {
 	float: left;
-	font-size: 2.0em;
-	margin-top: -12px;
+	margin-top: -5x;
 }
 
-input[type='radio'] { 
-	transform: scale(1.5); 
+#dev {
+	background-color: #ccc;
+	padding: 10px;
+	margin-top: 10px;
+	width: 950px;
+	font-size: 1.1em;
+	border: 1px solid red;
 }

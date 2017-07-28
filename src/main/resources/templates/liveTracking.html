@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Fleetman Live Tracking</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
     <link href="/styles.css" rel="stylesheet"/>
     
     <!-- Leaflet Maps  -->
@@ -28,7 +28,7 @@
    		var lastMessage;
    		
  			$(document).ready(function(){ 
-				mymap = L.map('mapid').setView([53.38207,-1.48423], 14);
+				mymap = L.map('mapid').setView([53.38207,-1.48423], 15);
 
 				L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZGlja2NoZXN0ZXJ3b29kIiwiYSI6ImNqNG9kcHI2aDJtN2wzMnBndmU3bWkzdmgifQ.rdSmry2jgNl4jmydiypisQ', {
     				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -90,26 +90,27 @@
     <h1>Fleetman Live Tracking</h1>
     
     <div class="row">
-  		<div class="col-md-7"><div id="mapid"></div></div>
-        <div class="col-md-3">
-			<div id="positionData">
-				<h3>Latest updates</h3>
-				<div class="outerBox" th:each="vehicle,iter : ${vehicles}" th:id="${vehicle.name}">
-				   <div class="checkboxDiv">
-				   		<input type='radio' name='vehicle' th:id="${vehicle.name} + '-radio'" checked="checked" th:if="${iter.index eq 0}"/>
-				   		<input type='radio' name='vehicle' th:id="${vehicle.name} + '-radio'" th:if="${iter.index gt 0}"/>				   		
-				   </div>
-				   		
-				   <div class="vehicleInfo">			
-					   <p><strong><span th:text="${vehicle.name}"/></strong></p>
-					   <p>No updates</p>
-					   <p>Speed: unreported</p>
-				   </div>
-			    </div>
-			</div>
+  		<div id="mapid"></div>
+		<div id="positionData">
+			<h3>Latest updates</h3>
+			<div class="outerBox" th:each="vehicle,iter : ${vehicles}" th:id="${vehicle.name}">
+			   <div class="checkboxDiv">
+			   		<input type='radio' name='vehicle' th:id="${vehicle.name} + '-radio'" checked="checked" th:if="${iter.index eq 0}"/>
+			   		<input type='radio' name='vehicle' th:id="${vehicle.name} + '-radio'" th:if="${iter.index gt 0}"/>				   		
+			   </div>
+			   		
+			   <div class="vehicleInfo">			
+				   <p><strong><span th:text="${vehicle.name}"/></strong></p>
+				   <p>No updates</p>
+				   <p>Speed: unreported</p>
+			   </div>
+		    </div>
 		</div>
     </div>
 
+	<div id="dev" th:if="${@environment.getActiveProfiles()[0] == 'docker-demo' || @environment.getActiveProfiles()[0] == 'development'}">
+	  <p>Running in local development mode with random and chaotic position data.</p>
+	</div>
 
   </body>
 </html>
