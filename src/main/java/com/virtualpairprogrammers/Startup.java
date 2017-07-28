@@ -2,6 +2,8 @@ package com.virtualpairprogrammers;
 
 import java.util.Arrays;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class Startup {
 										 "university_internal_mail_b","university_internal_mail_c","university_internal_mail_d","university_internal_mail_e",
 										 "university_internal_mail_f","university_internal_mail_g"};
 	
+	@PostConstruct
 	public void populateData()
 	{
 		Arrays.stream(requiredVehicles).forEach(it -> createVehicleIfDoesntExist(it));
