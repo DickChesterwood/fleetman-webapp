@@ -43,7 +43,7 @@ public class VehicleController
 	@RequestMapping(value="/deleteVehicle.html", method=RequestMethod.POST)
 	public String deleteVehicle(@RequestParam Long id)
 	{
-		data.delete(id);
+		data.deleteById(id);
 		return "redirect:/website/vehicles/list.html";		
 	}
 	

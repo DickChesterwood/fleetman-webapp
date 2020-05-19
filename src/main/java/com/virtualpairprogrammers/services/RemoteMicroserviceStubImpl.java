@@ -1,6 +1,7 @@
 package com.virtualpairprogrammers.services;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class RemoteMicroserviceStubImpl implements RemotePositionMicroserviceCal
 	
 	public static BigDecimal generateRandomBigDecimalFromRange(BigDecimal min, BigDecimal max) {
 	    BigDecimal randomBigDecimal = min.add(new BigDecimal(Math.random()).multiply(max.subtract(min)));
-	    return randomBigDecimal.setScale(6,BigDecimal.ROUND_HALF_UP);
+	    return randomBigDecimal.setScale(6,RoundingMode.HALF_UP);
 	}
 
 	public static BigDecimal generateRandomBigDecimalFromRange(String min, String max) {

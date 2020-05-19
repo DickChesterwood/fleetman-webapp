@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -23,7 +24,7 @@ import com.virtualpairprogrammers.domain.Vehicle;
 @Service
 @Transactional
 public class Startup {
-	Logger log = Logger.getLogger(getClass());
+	Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private VehicleRepository data;
