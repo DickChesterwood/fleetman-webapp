@@ -1,0 +1,178 @@
+#  Provisions a new Webserver
+
+- hosts: localhost
+  gather_facts: no
+  vars: 
+     region: us-west-2
+     keypair_name: docker-course-keypair
+     instance_type: t2.nano
+     image_name: ami-6df1e514
+     live_ip_address: 34.212.44.64
+  
+  tasks:
+    - name : Setup variables for later
+      set_fact:
+         region: "{{ region }}"
+         live_ip_address: "{{ live_ip_address }}"
+      
+    - name: Setup security group
+      ec2_group:
+        vpc_id: vpc-ec212388
+        name: http-server
+        description: Security rules for HTTP Server
+        region: "{{ region }}"
+        rules_egress:
+           - proto: tcp
+             from_port: 0
+             to_port: 65535
+             cidr_ip: 0.0.0.0/0
+        rules:
+           - proto: tcp
+             from_port: 8080
+             to_port: 8080
+             cidr_ip: 0.0.0.0/0
+           
+           - proto: tcp
+             from_port: 22
+             to_port: 22
+             cidr_ip: 0.0.0.0/0
+
+    - name: Provision an instance
+      ec2:
+        vpc_subnet_id: subnet-5c18572a
+        key_name: "{{ keypair_name }}"
+        group: http-server
+        instance_type: "{{ instance_type }}"
+        image: "{{ image_name }}"
+        wait: true
+        region: "{{region}}"
+        exact_count: 1 
+        count_tag:
+          Name: Webserver        
+          Deploy: Blue
+        instance_tags:
+          Name: Webserver
+          Deploy: Blue
+      register: ec2
+
+    - name: Add all instance public IPs to host group
+      add_host: hostname={{ item.public_ip }} groups=ec2hosts
+      with_items: "{{ec2.instances}}"
+
+    - name: Wait for SSH Server to start responding
+      wait_for:
+              port: 22
+              host: "{{item.public_ip}}"
+              state: started
+      with_items: "{{ec2.instances}}"
+
+- hosts: ec2hosts
+  tasks:
+  - name: upgrade all packages
+    yum: name=* state=latest
+    become: true
+  
+  - name: Install JDK
+    yum:
+       name: java-1.8.0-openjdk-devel
+       state: latest
+    become: true
+
+  - name: Use Java8 for Runtime Java
+    alternatives:
+       name: java
+       path: /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java
+       link: /usr/bin/java
+    become: true
+
+  - name: Send the deployment across to the new instance
+    copy: 
+       src: target/fleetman-0.0.1-SNAPSHOT.war
+       dest: /home/ec2-user/webapp/target/
+       mode: 0700
+
+  - name: Build a link to the executable so it becomes a service
+    file:
+            src: /home/ec2-user/webapp/target/fleetman-0.0.1-SNAPSHOT.war
+            dest: /etc/init.d/webapp
+            state: link
+    become: true
+    
+  - name: Send a config file to ensure the service starts up with production environment variable
+    copy:
+       content: JAVA_OPTS="-Dspring.profiles.active=production"
+       dest: /home/ec2-user/webapp/target/fleetman-0.0.1-SNAPSHOT.conf
+       mode: 0600
+
+  - name: Install Config Server as a startup service
+    service:
+            name: webapp
+            state: started
+            enabled: yes
+    become: true
+
+  - name: Wait for the new webserver to begin responding
+    wait_for:
+            host: localhost
+            port: 8080
+            state: started
+            
+# Series of steps to implement a Green -> Blue switchover
+- hosts: localhost
+  tasks:
+  - name: Gather facts about the new blue server
+    ec2_remote_facts:
+       filters:
+          "tag:Deploy": Blue
+          "tag:Name": Webserver
+          instance-state-name: running
+       region: "{{ region }}"
+    register: new_server
+
+  - name: Get the id of the old, soon to be dead, green server
+    ec2_remote_facts:
+       filters:
+          "tag:Deploy": Green
+          "tag:Name": Webserver
+          instance-state-name: running
+       region: "{{ region }}"
+    register: old_green
+
+  - name: Deallocate the EIP
+    ec2_eip:
+       device_id: "{{ old_green.instances[0].id }}"
+       ip: "{{ live_ip_address }}"
+       state: absent
+       region: "{{ region }}"
+    when: old_green.instances|length > 0
+
+  - name: Allocate the EIP to the new instance
+    ec2_eip:
+      device_id: "{{ new_server.instances[0].id }}"
+      ip: "{{ live_ip_address }}"
+      region: "{{ region }}"
+
+  - name: Terminate the existing Green Server.
+    ec2:
+      exact_count: 0
+      count_tag:
+        Deploy: Green
+        Name: Webserver
+      region: "{{ region }}"
+      image: notneeded
+
+  - name: All done, set new server to Green status
+    ec2_tag:
+       region: "{{ region }}"
+       resource: "{{ new_server.instances[0].id }}"
+       tags:
+          Deploy: Green
+       state: present
+
+  - name: Remove Blue Tag
+    ec2_tag:
+       region: "{{ region }}"
+       resource: "{{ new_server.instances[0].id }}"
+       tags:
+          Deploy: Blue
+       state: absent

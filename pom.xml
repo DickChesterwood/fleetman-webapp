@@ -6,7 +6,7 @@
 	<groupId>com.virtualpairprogrammers</groupId>
 	<artifactId>fleetman</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>fleetman</name>
 	<description>VPP's Fleet Management Application</description>
@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.3.RELEASE</version>
+		<version>1.5.2.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -22,6 +22,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.SR1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -33,6 +45,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-websocket</artifactId>
+	    </dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>		
 		
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -61,6 +83,12 @@
         	<optional>true</optional>
     	</dependency>
     	
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-tomcat</artifactId>
+	        <scope>provided</scope>
+	    </dependency>    	
+    	
     	<dependency>
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-security</artifactId>
@@ -86,39 +114,113 @@
     		<artifactId>spring-cloud-starter-feign</artifactId>
     	</dependency> 	
     		
+		
    		<dependency>
  	   		<groupId>org.springframework.cloud</groupId>
     		<artifactId>spring-cloud-starter-config</artifactId>
     	</dependency> 
-	</dependencies>
+    	
+    	
+    	<!--  For Spring Cloud Config. -->
+		<dependency>
+    		<groupId>org.springframework.retry</groupId>
+    		<artifactId>spring-retry</artifactId>
+    		<version>1.2.1.RELEASE</version>
+		</dependency>
+    	
+     	<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-aop</artifactId>
+    	</dependency>   	
+    	
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
 	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Camden.RELEASE</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+		<!-- Webjars brings in resources such as stylessheets and libraries like Jquery in as jars -->
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>webjars-locator</artifactId>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>sockjs-client</artifactId>
+	      <version>1.0.2</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>stomp-websocket</artifactId>
+	      <version>2.3.3</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>bootstrap</artifactId>
+	      <version>3.3.7</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.webjars</groupId>
+	      <artifactId>jquery</artifactId>
+	      <version>3.1.0</version>
+	    </dependency>		
+	    
+	</dependencies>
 	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!--  For standalone JAR file <configuration><executable>false</executable></configuration> -->
+				<configuration>
+                	<mainClass>com.virtualpairprogrammers.TomcatWARApplication</mainClass>
+            	</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.21.0</version>
+
+				<configuration>
+					<!--  If using Docker Toolbox (Windows), you must find the IP of your VM. docker-machine ip -->
+                    <dockerHost>http://192.168.99.100:2375</dockerHost> 
+
+					<!--  linux -->
+                    <!--<dockerHost>http://127.0.0.1:2375</dockerHost>-->
+                    <!--  this is for Mac -->
+                    <!-- <dockerHost>unix:///var/run/docker.sock</dockerHost> -->
+
+                    <verbose>true</verbose>
+					<images>
+						<image>
+							<name>virtualpairprogrammers/fleetman-webapp</name>
+							<build>
+								<!--  TODO better to have this in a subdirectory -->
+								<dockerFileDir>${project.basedir}/src/main/docker/</dockerFileDir>
+
+                                <!--copies artficact to docker build dir in target-->
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<tags>
+									<tag>latest</tag>
+									<tag>${project.version}</tag>
+								</tags>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+			
+			
 		</plugins>
 		
 		<resources>
 			<resource>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
-				<includes>
-					<include>application.properties</include>
-				</includes>
 			</resource>		
 		</resources>
 		
